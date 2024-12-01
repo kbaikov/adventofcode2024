@@ -1,6 +1,4 @@
-import re
 import pathlib
-from dataclasses import dataclass
 
 TEST_INPUT = """\
 3   4
@@ -14,15 +12,21 @@ TEST_INPUT = """\
 FILE = pathlib.Path("day01_input.txt").read_text()
 
 
-def parse_table(text: str) -> list[tuple[str, int]]:
-    entries: list[tuple[str, int]] = []
+def parse_table(text: str) -> tuple[list[int], list[int]]:
+    left: list[int] = []
+    right: list[int] = []
     for line in text.splitlines():
-        card, bid = line.split()
-        entries.append((card, int(bid)))
-    return entries
+        l, r = line.split()
+        left.append(int(l))
+        right.append(int(r))
+    return left, right
 
 
-def part1(text: str) -> int: ...
+def part1(text: str) -> int:
+    left, right = parse_table(text)
+    left.sort()
+    right.sort()
+    return sum(abs(l - r) for l, r in zip(left, right))
 
 
 def test_part1():
