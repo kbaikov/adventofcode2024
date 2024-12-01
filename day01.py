@@ -1,4 +1,5 @@
 import pathlib
+from collections import Counter
 
 TEST_INPUT = """\
 3   4
@@ -35,18 +36,19 @@ def test_part1():
 
 if __name__ == "__main__":
     answer = part1(FILE)
+    # print(answer)
+
+
+def part2(text: str) -> int:
+    left, right = parse_table(text)
+    counted = Counter(right)
+    return sum(x * counted[x] for x in left)
+
+
+def test_part2():
+    assert part2(TEST_INPUT) == 31
+
+
+if __name__ == "__main__":
+    answer = part2(FILE)
     print(answer)
-
-
-# def part2(text: str)-> int:
-#     ...
-#
-#
-# def test_part2():
-#     assert part2(TEST_INPUT) == 123456
-#
-#
-#
-# if __name__ == "__main__":
-#     answer = part2(FILE)
-#     print(answer)
