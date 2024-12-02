@@ -31,6 +31,14 @@ def is_safe(entry: list[int]) -> bool:
     return False
 
 
+def is_really_unsafe(entry: list[int]) -> bool:
+    for i, x in enumerate(entry):
+        new_list = entry[:i] + entry[i + 1 :]
+        if is_safe(new_list):
+            return True
+    return False
+
+
 def part1(text: str) -> int:
     entries = parse_table(text)
     return sum(is_safe(entry) for entry in entries)
@@ -42,18 +50,24 @@ def test_part1():
 
 if __name__ == "__main__":
     answer = part1(FILE)
+    # print(answer)
+
+
+def part2(text: str) -> int:
+    entries = parse_table(text)
+    result = []
+    for entry in entries:
+        if is_safe(entry):
+            result.append(True)
+        else:
+            result.append(is_really_unsafe(entry))
+    return sum(result)
+
+
+def test_part2():
+    assert part2(TEST_INPUT) == 4
+
+
+if __name__ == "__main__":
+    answer = part2(FILE)
     print(answer)
-
-
-# def part2(text: str)-> int:
-#     ...
-#
-#
-# def test_part2():
-#     assert part2(TEST_INPUT) == 123456
-#
-#
-#
-# if __name__ == "__main__":
-#     answer = part2(FILE)
-#     print(answer)
