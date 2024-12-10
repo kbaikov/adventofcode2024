@@ -18,25 +18,21 @@ MXMXAXMASX
 FILE = pathlib.Path("day04_input.txt").read_text()
 
 
-# def parse_table(text: str) -> list[tuple[str, int]]:
-#     entries: list[tuple[str, int]] = []
-#     for line in text.splitlines():
-#         card, bid = line.split()
-#         entries.append((card, int(bid)))
-#     return entries
+Point = tuple[int, int]
+Grid = dict[Point, str]
 
 
 def part1(text: str) -> int:
     text = text.splitlines()
-    Grid = defaultdict(str) | {(x, y): column for x, row in enumerate(text) for y, column in enumerate(row)}
+    grid: Grid = {(x, y): column for x, row in enumerate(text) for y, column in enumerate(row)}
 
-    g = list(Grid.keys())
+    g = list(grid.keys())
     D = list(product((-1, 0, 1), repeat=2))
     T = list("XMAS")
     result = 0
     for i, j in g:
         for di, dj in D:
-            match = [Grid[i + di * n, j + dj * n] for n in range(4)]
+            match = [grid.get((i + di * n, j + dj * n)) for n in range(4)]
             if match == T:
                 result += 1
     return result
@@ -48,18 +44,33 @@ def test_part1():
 
 if __name__ == "__main__":
     answer = part1(FILE)
+    # print(answer)
+
+
+def point_lookup(point: Point, grid: Grid) -> int:
+    i, j = point
+    directions = -1, 0, 1
+    T = list("MAS"), list("SAM")
+    result = 0
+    for word in T:
+        match = [grid.get((i + d, j + d)) for d in directions]
+        match2 = [grid.get((i + d, j - d)) for d in directions]
+
+        if match in T and match2 in T:
+            result += 1
+    return result
+
+
+def part2(text: str) -> int:
+    grid: Grid = {(x, y): column for x, row in enumerate(text.splitlines()) for y, column in enumerate(row)}
+
+    return int(sum(point_lookup(point, grid) for point in grid) / 2)
+
+
+def test_part2():
+    assert part2(TEST_INPUT) == 9
+
+
+if __name__ == "__main__":
+    answer = part2(FILE)
     print(answer)
-
-
-# def part2(text: str)-> int:
-#     ...
-#
-#
-# def test_part2():
-#     assert part2(TEST_INPUT) == 123456
-#
-#
-#
-# if __name__ == "__main__":
-#     answer = part2(FILE)
-#     print(answer)
