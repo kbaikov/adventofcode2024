@@ -1,5 +1,4 @@
 import pathlib
-from collections import defaultdict
 from itertools import product
 
 TEST_INPUT = """\
@@ -23,8 +22,8 @@ Grid = dict[Point, str]
 
 
 def part1(text: str) -> int:
-    text = text.splitlines()
-    grid: Grid = {(x, y): column for x, row in enumerate(text) for y, column in enumerate(row)}
+    lines = text.splitlines()
+    grid: Grid = {(x, y): column for x, row in enumerate(lines) for y, column in enumerate(row)}
 
     g = list(grid.keys())
     D = list(product((-1, 0, 1), repeat=2))
@@ -52,7 +51,7 @@ def point_lookup(point: Point, grid: Grid) -> int:
     directions = -1, 0, 1
     T = list("MAS"), list("SAM")
     result = 0
-    for word in T:
+    for _ in T:
         match = [grid.get((i + d, j + d)) for d in directions]
         match2 = [grid.get((i + d, j - d)) for d in directions]
 
@@ -62,7 +61,9 @@ def point_lookup(point: Point, grid: Grid) -> int:
 
 
 def part2(text: str) -> int:
-    grid: Grid = {(x, y): column for x, row in enumerate(text.splitlines()) for y, column in enumerate(row)}
+    grid: Grid = {
+        (x, y): column for x, row in enumerate(text.splitlines()) for y, column in enumerate(row)
+    }
 
     return int(sum(point_lookup(point, grid) for point in grid) / 2)
 

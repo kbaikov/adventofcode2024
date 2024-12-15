@@ -19,7 +19,7 @@ def parse_table(text: str) -> list[tuple[str, int]]:
 def part1(text: str) -> int: ...
 
 
-def test_part1():
+def test_part1() -> None:
     assert part1(TEST_INPUT) == 123456
 
 
@@ -27,7 +27,7 @@ def test_part1():
 #     ...
 #
 #
-# def test_part2():
+# def test_part2() -> None:
 #     assert part2(TEST_INPUT) == 123456
 
 
