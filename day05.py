@@ -1,6 +1,5 @@
-import re
 import pathlib
-from dataclasses import dataclass
+from collections.abc import Iterable
 
 TEST_INPUT = """\
 47|53
@@ -51,9 +50,7 @@ def parse_table(text: str) -> tuple[list[Rule], list[Update]]:
     return rules, updates
 
 
-def satisfies_rules(update: Update, rules: list[Rule]) -> bool:
-    # left, right = [x[0] for x in rules], [x[1] for x in rules]
-
+def satisfies_rules(update: Update, rules: Iterable[Rule]) -> bool:
     for i, number in enumerate(update):
         for left, right in rules:
             if left == number:
@@ -66,7 +63,7 @@ def satisfies_rules(update: Update, rules: list[Rule]) -> bool:
     return True
 
 
-def test_satisfies_rules():
+def test_satisfies_rules() -> None:
     assert satisfies_rules([75, 97, 47, 61, 53], [(97, 75)]) is False
     assert satisfies_rules([61, 13, 29], [(29, 13)]) is False
     assert satisfies_rules([97, 13, 75, 29, 47], [(97, 75), (75, 13)]) is False
@@ -79,25 +76,80 @@ def part1(text: str) -> int:
     return sum(update[len(update) // 2] for update in updates if satisfies_rules(update, rules))
 
 
-def test_part1():
+def test_part1() -> None:
     assert part1(TEST_INPUT) == 143
+    assert part1(FILE) == 6505
+
+
+def fix_update(update: Update, rules: Iterable[Rule]) -> Update:
+    """from https://www.reddit.com/r/adventofcode/comments/1h71eyz/comment/m0i09b0/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"""
+    from functools import cmp_to_key
+
+    cmp = cmp_to_key(lambda x, y: 1 - 2 * ((x, y) in set(rules)))
+
+    return sorted(update, key=cmp)
+    # new_update = update[:]
+    # while not satisfies_rules(new_update, rules):
+    #     for rule in rules:
+    #         left, right = rule
+
+    #         for i, number in enumerate(update):
+    #             if left == number:
+    #                 if right in update[:i]:
+    #                     new_update.pop(new_update.index(right))
+    #                     new_update.insert(i + 1, right)
+    #                     break
+    #             elif right == number:
+    #                 if left in update[i:]:
+    #                     new_update.pop(new_update.index(left))
+    #                     new_update.insert(i, left)
+    #                     break
+
+    # return new_update
+
+
+def fix_update2(update: Update, rules: Iterable[Rule]) -> Update:
+    """from https://www.reddit.com/r/adventofcode/comments/1h71eyz/comment/m0kezt2/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"""
+    return sorted(update, key=lambda x: -sum((x, y) in rules for y in update))
+
+
+def test_fix_update() -> None:
+    rules, _ = parse_table(TEST_INPUT)
+    assert fix_update([75, 97, 47, 61, 53], rules) == [97, 75, 47, 61, 53]
+    assert fix_update([61, 13, 29], rules) == [61, 29, 13]
+    assert fix_update([97, 13, 75, 29, 47], rules) == [97, 75, 47, 29, 13]
+
+
+def broken_rules(update: Update, rules: list[Rule]) -> set[Rule]:
+    broken = set()
+    for i, number in enumerate(update):
+        for left, right in rules:
+            if left == number:
+                if right in update[:i]:
+                    broken.add((left, right))
+            elif right == number:
+                if left in update[i:]:
+                    broken.add((left, right))
+
+    return broken
+
+
+def part2(text: str) -> int:
+    rules, updates = parse_table(text)
+    incorrect_updates = [update for update in updates if not satisfies_rules(update, rules)]
+    # to_fix = [(u, broken_rules(u, rules)) for u in incorrect_updates]
+
+    fixed_updates = [fix_update2(u, rules) for u in incorrect_updates]
+    return sum(update[len(update) // 2] for update in fixed_updates)
+
+
+def test_part2() -> None:
+    assert part2(TEST_INPUT) == 123
+    assert part2(FILE) == 6897
 
 
 if __name__ == "__main__":
-    print(part1(FILE))
-    # print(test_part1())
-    # test_satisfies_rules()
-
-
-# def part2(text: str)-> int:
-#     ...
-#
-#
-# def test_part2():
-#     assert part2(TEST_INPUT) == 123456
-#
-#
-#
-# if __name__ == "__main__":
-#     answer = part2(FILE)
-#     print(answer)
+    test_part1()
+    # print(part1(FILE))
+    test_part2()
+    print(part2(FILE))
