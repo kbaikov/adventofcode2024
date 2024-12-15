@@ -113,6 +113,16 @@ def fix_update2(update: Update, rules: Iterable[Rule]) -> Update:
     return sorted(update, key=lambda x: -sum((x, y) in rules for y in update))
 
 
+def fix_update3(update: Update, rules: Iterable[Rule]) -> Update:
+    """from https://github.com/norvig/pytudes/blob/main/ipynb/Advent-2024.ipynb"""
+    from functools import cmp_to_key
+
+    def rule_lookup(m, n):
+        return +1 if (m, n) in rules else -1
+
+    return sorted(update, key=cmp_to_key(rule_lookup))
+
+
 def test_fix_update() -> None:
     rules, _ = parse_table(TEST_INPUT)
     assert fix_update([75, 97, 47, 61, 53], rules) == [97, 75, 47, 61, 53]
@@ -139,7 +149,7 @@ def part2(text: str) -> int:
     incorrect_updates = [update for update in updates if not satisfies_rules(update, rules)]
     # to_fix = [(u, broken_rules(u, rules)) for u in incorrect_updates]
 
-    fixed_updates = [fix_update2(u, rules) for u in incorrect_updates]
+    fixed_updates = [fix_update3(u, rules) for u in incorrect_updates]
     return sum(update[len(update) // 2] for update in fixed_updates)
 
 
