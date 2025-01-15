@@ -21,13 +21,17 @@ Grid = dict[Point, str]
 
 def parse_table(text: str) -> Grid:
     lines = text.splitlines()
-    grid: Grid = {(x, y): column for x, row in enumerate(lines) for y, column in enumerate(row)}
+    grid: Grid = {
+        (x, y): column for x, row in enumerate(lines) for y, column in enumerate(row)
+    }
     return grid
 
 
 def part1(text: str) -> int:
     grid = parse_table(text)
     print(grid)
+    startx, starty = next(k for k, v in grid.items() if v == "^")
+    print(startx, starty)
     return 0
 
 
