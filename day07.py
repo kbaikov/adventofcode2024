@@ -60,6 +60,25 @@ def is_valid_recursive(test_value: int, coefficients: Coefficients) -> bool:
     return False
 
 
+def is_valid_recursive_concat(test_value: int, coefficients: Coefficients) -> bool:
+    """From https://www.youtube.com/watch?v=pSqvQiqOVO0"""
+    if len(coefficients) == 1:
+        return test_value == coefficients[0]
+    if is_valid_recursive_concat(
+        test_value, (coefficients[0] + coefficients[1], *coefficients[2:])
+    ):
+        return True
+    if is_valid_recursive_concat(
+        test_value, (coefficients[0] * coefficients[1], *coefficients[2:])
+    ):
+        return True
+    if is_valid_recursive_concat(
+        test_value, (int(f"{coefficients[0]}{coefficients[1]}"), *coefficients[2:])
+    ):
+        return True
+    return False
+
+
 def part1(text: str) -> int:
     entries = parse_table(text)
     return sum(entry[0] for entry in entries if is_valid_recursive(*entry))
@@ -72,16 +91,17 @@ def test_part1() -> None:
 
 def part2(text: str) -> int:
     entries = parse_table(text)
-    return sum(entry[0] for entry in entries if is_valid(*entry))
+    return sum(entry[0] for entry in entries if is_valid_recursive_concat(*entry))
 
 
 def test_part2() -> None:
     assert part2(TEST_INPUT) == 11387
+    assert part2(FILE) == 97902809384118
 
 
 if __name__ == "__main__":
     # test_part1()
-    test_part2()
+    # test_part2()
     # test_is_valid()
     # print(part1(FILE))
-    # print(part2(FILE))
+    print(part2(FILE))
