@@ -2,6 +2,8 @@
 
 import pathlib
 
+import pytest
+
 TEST_INPUT = """\
 """
 
@@ -19,8 +21,15 @@ def parse_table(text: str) -> list[tuple[str, int]]:
 def part1(text: str) -> int: ...
 
 
-def test_part1() -> None:
-    assert part1(TEST_INPUT) == 123456
+@pytest.mark.parametrize(
+    "test_input, expected",
+    [
+        (TEST_INPUT, 12345),
+        (FILE, 12345),
+    ],
+)
+def test_part1(test_input, expected) -> None:
+    assert part1(test_input) == expected
 
 
 # def part2(text: str)-> int:
@@ -32,5 +41,6 @@ def test_part1() -> None:
 
 
 if __name__ == "__main__":
-    print(part1(FILE))
+    pytest.main([__file__])
+    # print(part1(FILE))
     # print(part2(FILE))
