@@ -1,6 +1,21 @@
 import time
 from collections.abc import Callable
 from enum import Enum
+from functools import wraps
+
+
+def trace(func):
+    """Print the arguments and return value of a function call."""
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        args_repr = repr(args)
+        kwargs_repr = repr(kwargs)
+        result = func(*args, **kwargs)
+        print(f"{func.__name__}({args_repr}, {kwargs_repr}) -> {result!r}")
+        return result
+
+    return wrapper
 
 
 class State(Enum):
