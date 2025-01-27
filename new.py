@@ -18,7 +18,8 @@ def parse_table(text: str) -> list[tuple[str, int]]:
     return entries
 
 
-def part1(text: str) -> int: ...
+def part1(text: str) -> int:
+    return 0
 
 
 @pytest.mark.parametrize(
@@ -28,7 +29,7 @@ def part1(text: str) -> int: ...
         (FILE, 12345),
     ],
 )
-def test_part1(test_input, expected) -> None:
+def test_part1(test_input: str, expected: int) -> None:
     assert part1(test_input) == expected
 
 

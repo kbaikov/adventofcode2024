@@ -22,7 +22,7 @@ def _get_cookie_headers() -> dict[str, str]:
 def get_input(year: int, day: int) -> str:
     url = f"https://adventofcode.com/{year}/day/{day}/input"
     req = urllib.request.Request(url, headers=_get_cookie_headers())
-    return urllib.request.urlopen(req).read().decode()
+    return str(urllib.request.urlopen(req).read().decode())
 
 
 def get_year() -> int:
@@ -79,7 +79,7 @@ def _post_answer(year: int, day: int, part: int, answer: str) -> str:
     )
     resp = urllib.request.urlopen(req)
 
-    return resp.read().decode()
+    return str(resp.read().decode())
 
 
 def submit_solution() -> int:

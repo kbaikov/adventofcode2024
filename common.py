@@ -2,13 +2,17 @@ import time
 from collections.abc import Callable
 from enum import Enum
 from functools import wraps
+from typing import ParamSpec, TypeVar
+
+T = TypeVar("T")
+P = ParamSpec("P")
 
 
-def trace(func):
+def trace(func: Callable[P, T]) -> Callable[P, T]:
     """Print the arguments and return value of a function call."""
 
     @wraps(func)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
         args_repr = repr(args)
         kwargs_repr = repr(kwargs)
         result = func(*args, **kwargs)

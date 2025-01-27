@@ -117,7 +117,7 @@ def fix_update3(update: Update, rules: Iterable[Rule]) -> Update:
     """from https://github.com/norvig/pytudes/blob/main/ipynb/Advent-2024.ipynb"""
     from functools import cmp_to_key
 
-    def rule_lookup(m, n):
+    def rule_lookup(m: int, n: int) -> int:
         return +1 if (m, n) in rules else -1
 
     return sorted(update, key=cmp_to_key(rule_lookup))

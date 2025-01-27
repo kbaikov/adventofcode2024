@@ -37,7 +37,7 @@ def part1(text: str) -> int:
     return result
 
 
-def test_part1():
+def test_part1() -> None:
     assert part1(TEST_INPUT) == 18
 
 
@@ -61,14 +61,12 @@ def point_lookup(point: Point, grid: Grid) -> int:
 
 
 def part2(text: str) -> int:
-    grid: Grid = {
-        (x, y): column for x, row in enumerate(text.splitlines()) for y, column in enumerate(row)
-    }
+    grid: Grid = {(x, y): column for x, row in enumerate(text.splitlines()) for y, column in enumerate(row)}
 
     return int(sum(point_lookup(point, grid) for point in grid) / 2)
 
 
-def test_part2():
+def test_part2() -> None:
     assert part2(TEST_INPUT) == 9
 
 

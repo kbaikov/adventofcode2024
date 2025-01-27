@@ -14,7 +14,7 @@ def part1(text: str) -> int:
     return sum(int(x) * int(y) for x, y in found)
 
 
-def test_part1():
+def test_part1() -> None:
     assert part1(TEST_INPUT) == 161
 
 
@@ -45,7 +45,7 @@ def part2(text: str) -> int:
     return part1(result)
 
 
-def test_part2():
+def test_part2() -> None:
     assert part2("xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))") == 48
 
 

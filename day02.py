@@ -44,7 +44,7 @@ def part1(text: str) -> int:
     return sum(is_safe(entry) for entry in entries)
 
 
-def test_part1():
+def test_part1() -> None:
     assert part1(TEST_INPUT) == 2
 
 
@@ -64,7 +64,7 @@ def part2(text: str) -> int:
     return sum(result)
 
 
-def test_part2():
+def test_part2() -> None:
     assert part2(TEST_INPUT) == 4
 
 

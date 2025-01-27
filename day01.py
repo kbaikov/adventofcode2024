@@ -30,7 +30,7 @@ def part1(text: str) -> int:
     return sum(abs(l - r) for l, r in zip(left, right))
 
 
-def test_part1():
+def test_part1() -> None:
     assert part1(TEST_INPUT) == 11
 
 
@@ -45,7 +45,7 @@ def part2(text: str) -> int:
     return sum(x * counted[x] for x in left)
 
 
-def test_part2():
+def test_part2() -> None:
     assert part2(TEST_INPUT) == 31
 
 
